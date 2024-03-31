@@ -1,0 +1,18 @@
+.sidebar-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    background-color: white;
+    padding: 5px;
+}
+.menus {
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+}
+@media (max-width: 500px) {
+    .search-button {
+        display: none;
+    }
+}
