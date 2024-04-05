@@ -11,6 +11,9 @@
     flex-direction: row;
     gap: 5px;
 }
+.profile-menu {
+    margin: 0vw 1vw;
+}
 @media (max-width: 500px) {
     .search-button {
         display: none;
