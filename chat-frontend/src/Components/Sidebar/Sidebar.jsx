@@ -4,7 +4,7 @@ import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Button from "react-bootstrap/Button";
 import Dropdown from "react-bootstrap/Dropdown";
 import { Bell } from "react-bootstrap-icons";
-import Avatar from "react-avatar";
+import { Avatar } from "@chakra-ui/react";
 import { ChatContext } from "../../Context/ChatProvider";
 import "./Sidebar.css";
 import ProfileModal from "../ProfileModal/ProfileModal";
@@ -12,16 +12,16 @@ import { useNavigate } from "react-router";
 import { useDisclosure } from "@chakra-ui/hooks";
 import ChatLoading from "../ChatLoading/ChatLoading";
 import UserListItem from "../UserListItem/UserListItem";
+import Loader from "../Loader/Loader";
+import axios from "axios";
 
 import {
     Input,
     Drawer,
     DrawerBody,
-    DrawerFooter,
     DrawerHeader,
     DrawerOverlay,
     DrawerContent,
-    DrawerCloseButton,
     useToast,
 } from "@chakra-ui/react";
 
@@ -29,11 +29,12 @@ function Sidebar() {
     const [search, setSearch] = useState("");
     const [searchResult, setSearchResult] = useState([]);
     const [loading, setLoading] = useState(false);
-    // const [loadingChat, setLoadingChat] = useState();
+    const [loadingChat, setLoadingChat] = useState();
     const [showModal, setShowModal] = useState(false);
+    //const [selectedChat, setSelectedChat] = useState();
     const { isOpen, onOpen, onClose } = useDisclosure();
 
-    const { user } = useContext(ChatContext);
+    const { user, setSelectedChat, chats, setChats } = useContext(ChatContext);
     const navigate = useNavigate();
 
     const handleLogOut = () => {
@@ -43,7 +44,53 @@ function Sidebar() {
 
     const toast = useToast();
 
-    async function fetchUser() {
+    const accessChat = async (userId) => {
+        ///console.log("entered");
+        try {
+            setLoadingChat(true);
+            const config = {
+                headers: {
+                    // we use "content-type" here as we send json data through our request
+                    "Content-type": "application/json",
+                    Authorization: `Bearer ${user.token}`,
+                },
+            };
+            const { data } = await axios.post(
+                "http://localhost:3030/api/chat",
+                { userId },
+                config
+            );
+            // if the selected chat is not in the chat list, then append it to the user's chat list.
+            if (!chats.find((c) => c._id === data._id))
+                setChats([data, ...chats]);
+            setSelectedChat(data);
+            //close side drawer after a chat is selected
+            onClose();
+        } catch (error) {
+            console.log(error);
+            toast({
+                title: "Error in showing selected chat",
+                status: "warning",
+                duration: "5500",
+                isClosable: true,
+                position: "top-left",
+            });
+        } finally {
+            setLoadingChat(false);
+        }
+    };
+
+    const handleSearch = async () => {
+        if (!search) {
+            toast({
+                title: "Enter a valid username or mail",
+                status: "warning",
+                duration: "5500",
+                isClosable: true,
+                position: "top-left",
+            });
+            return;
+        }
         try {
             setLoading(true);
             const config = {
@@ -51,8 +98,15 @@ function Sidebar() {
                     Authorization: `Bearer ${user.token}`,
                 },
             };
-            const { data } = await fetch(`/api/user?search=${search}`, config);
-        } catch {
+            const { data } = await axios.get(
+                `http://localhost:3030/api/user?search=${search}`,
+                config
+            );
+            //console.log("fetched data:");
+            setSearchResult(data);
+            //console.log(data);
+        } catch (error) {
+            console.log(error);
             toast({
                 title: "Failed to load searched user",
                 status: "error",
@@ -62,23 +116,8 @@ function Sidebar() {
             });
         } finally {
             setLoading(false);
-            console.log("fetching user completed");
+            //console.log("fetching user completed");
         }
-    }
-
-    const accessChat = (userId) => {};
-
-    const handleSearch = () => {
-        if (!search) {
-            toast({
-                title: "Enter a valid username or mail",
-                status: "warning",
-                duration: "5500",
-                isClosable: true,
-                position: "top-left",
-            });
-        }
-        fetchUser();
     };
 
     return (
@@ -128,11 +167,11 @@ function Sidebar() {
                             style={{ padding: "4% 3%" }}
                         >
                             <Avatar
-                                size="32"
-                                round={true}
+                                mr={2}
+                                size="sm"
+                                cursor="pointer"
                                 name={user.name}
                                 src={user.pic}
-                                cursor="pointer"
                             />
                         </Dropdown.Toggle>
                         <Dropdown.Menu>
@@ -180,14 +219,12 @@ function Sidebar() {
                             <ChatLoading />
                         ) : (
                             searchResult?.map((user) => (
-                                <UserListItem
-                                    key={user._id}
-                                    handleFunction={() => {
-                                        accessChat(user._id);
-                                    }}
-                                />
+                                <div onClick={() => accessChat(user._id)}>
+                                    <UserListItem key={user._id} user={user} />
+                                </div>
                             ))
                         )}
+                        {loadingChat && <Loader />}
                     </DrawerBody>
                 </DrawerContent>
             </Drawer>

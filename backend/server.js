@@ -1,7 +1,12 @@
 const express = require("express");
-
+const cors = require("cors");
 const app = express();
-
+// app.use(
+//     cors({
+//         origin: "http://localhost:3000",
+//         allowedHeaders: ["Content-Type", "Authorization"], // Specify the allowed headers
+//     })
+// );
 const dotenv = require("dotenv");
 const { chats } = require("./data/data");
 const colors = require("colors");

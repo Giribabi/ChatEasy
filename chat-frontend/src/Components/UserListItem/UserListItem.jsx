@@ -1,22 +1,25 @@
-import React, { useContext } from "react";
-import { ChatContext } from "../../Context/ChatProvider";
+import React from "react";
 import { Box, Text } from "@chakra-ui/layout";
-function UserListItem({ handleFunction }) {
-    const { user } = useContext(ChatContext);
+import { Avatar } from "@chakra-ui/react";
+import "./UserListItem.css";
+function UserListItem({ user, handleFunction }) {
     return (
-        <Box
-            onClick={handleFunction}
-            cursor="pointer"
-            bg="lightgray"
-            _hover={{
-                background: "gray",
-                color: "white",
-            }}
-            w="100%"
-            d="flex"
-            alignItems="center"
-            color="black"
-        ></Box>
+        <div className="chat-box">
+            <Avatar
+                mr={2}
+                size="sm"
+                cursor="pointer"
+                name={user.name}
+                src={user.pic}
+            />
+            <Box>
+                <Text margin="0%">{user.name}</Text>
+                <Text fontSize="xs" margin="0%">
+                    <b>Email: </b>
+                    {user.email}
+                </Text>
+            </Box>
+        </div>
     );
 }
 

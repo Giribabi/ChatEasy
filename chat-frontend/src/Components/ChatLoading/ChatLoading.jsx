@@ -6,8 +6,8 @@ function ChatLoading() {
     return (
         <div>
             <Stack>
-                {[...Array(12)].map(() => (
-                    <Skeleton height="45px" />
+                {[...Array(12)].map((index) => (
+                    <Skeleton height="45px" key={index} />
                 ))}
             </Stack>
         </div>
