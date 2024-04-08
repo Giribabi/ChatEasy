@@ -64,6 +64,7 @@ function Sidebar() {
             if (!chats.find((c) => c._id === data._id))
                 setChats([data, ...chats]);
             setSelectedChat(data);
+            //console.log(data);
             //close side drawer after a chat is selected
             onClose();
         } catch (error) {

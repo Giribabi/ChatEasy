@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import "./Home.css";
 import Signup from "../../Components/Signup/Signup";
-import Login from "../../Components//Login/Login";
+import Login from "../../Components/Login/Login";
 
 function Home() {
     const navigate = useNavigate();

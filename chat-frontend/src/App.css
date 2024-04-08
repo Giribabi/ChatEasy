@@ -4,3 +4,7 @@
     background-size: cover;
     background-position: center;
 }
+/* for removing scroll bar aside chat list */
+::-webkit-scrollbar {
+    width: 0px;
+}
