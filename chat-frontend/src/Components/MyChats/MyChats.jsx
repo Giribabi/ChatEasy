@@ -5,6 +5,7 @@ import { Box, Text } from "@chakra-ui/layout";
 import { Plus } from "react-bootstrap-icons";
 import { Stack } from "@chakra-ui/layout";
 import axios from "axios";
+import GroupChatCRUDModal from "../GroupChatCRUDModal/GroupChatCRUDModal";
 
 function MyChats() {
     const [loggedUser, setLoggerUser] = useState();
@@ -24,8 +25,8 @@ function MyChats() {
                 "http://localhost:3030/api/chat",
                 config
             );
-            //console.log("chats:");
-            // console.log(data);
+            console.log("chats:");
+            console.log(data);
             setChats(data);
         } catch (error) {
             console.log(error);
@@ -66,9 +67,10 @@ function MyChats() {
                 alignItems="center"
                 p={3}
                 bg="white"
-                w={{ base: "100%", md: "60%" }}
+                w="100%"
                 borderRadius="lg"
                 borderWidth="1px"
+                my={3}
             >
                 <Box
                     pb={3}
@@ -81,14 +83,16 @@ function MyChats() {
                     alignItems="center"
                 >
                     My Chats
-                    <Button
-                        d="flex"
-                        fontSize={{ base: "17px", md: "10px", lg: "17px" }}
-                        rightIcon={<Plus />}
-                        m={2}
-                    >
-                        New Group Chat
-                    </Button>
+                    <GroupChatCRUDModal>
+                        <Button
+                            d="flex"
+                            fontSize={{ base: "17px", md: "10px", lg: "17px" }}
+                            rightIcon={<Plus />}
+                            m={2}
+                        >
+                            New Group Chat
+                        </Button>
+                    </GroupChatCRUDModal>
                 </Box>
                 <Box
                     d="flex"

@@ -3,16 +3,23 @@ import show_password from "./../../assets/show-password.png";
 import hide_password from "./../../assets/hide-password.png";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { useToast } from "@chakra-ui/react";
 
 function Login() {
     const [email, setEmail] = useState();
     const [password, setPassword] = useState();
     const [show, setShow] = useState(false);
     const navigate = useNavigate();
-
+    const toast = useToast();
     const handleSubmit = async () => {
         if (!email || !password) {
-            window.alert("please fill all the details");
+            toast({
+                title: "Please fill all the credentials",
+                status: "warning",
+                duration: "5500",
+                isClosable: true,
+                position: "top-left",
+            });
             return;
         }
         try {
@@ -29,7 +36,13 @@ function Login() {
                 },
                 config
             );
-            window.alert("login successful");
+            toast({
+                title: "Login successful",
+                status: "success",
+                duration: "5500",
+                isClosable: true,
+                position: "top-left",
+            });
             localStorage.setItem("userInfo", JSON.stringify(data));
             navigate("/chats");
         } catch (err) {
