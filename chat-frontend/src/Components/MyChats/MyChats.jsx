@@ -7,7 +7,7 @@ import { Stack } from "@chakra-ui/layout";
 import axios from "axios";
 import GroupChatCRUDModal from "../GroupChatCRUDModal/GroupChatCRUDModal";
 
-function MyChats() {
+function MyChats({ fetchChatsAgain }) {
     const [loggedUser, setLoggerUser] = useState();
     const { user, selectedChat, setSelectedChat, chats, setChats } =
         useContext(ChatContext);
@@ -46,7 +46,7 @@ function MyChats() {
             fetchChats();
         }
         // added 'user' object in the dependency array so that use effect is executed after change in user object.
-    }, [user, chats.length]);
+    }, [user, chats.length, fetchChatsAgain]);
 
     // for group chat, we can display group name while showing chat list, but for 1v1 chat, we need to show the
     //user name who is not logged in the current device
@@ -62,15 +62,16 @@ function MyChats() {
     return (
         <div>
             <Box
-                d={{ base: selectedChat ? "none" : "flex", md: "flex" }}
+                display={selectedChat ? "flex" : "flex"}
                 flexDir="column"
                 alignItems="center"
                 p={3}
                 bg="white"
-                w="100%"
+                w="35vw"
+                h="89vh"
                 borderRadius="lg"
                 borderWidth="1px"
-                my={3}
+                marginTop={3}
             >
                 <Box
                     pb={3}
