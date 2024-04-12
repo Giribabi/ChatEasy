@@ -1,10 +1,14 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { ChatContext } from "../../Context/ChatProvider";
 import { ArrowLeft } from "react-bootstrap-icons";
 import ProfileModal from "../ProfileModal/ProfileModal";
+import UpdateGroupChatModal from "../UpdateGroupChatModal/UpdateGroupChatModal";
+import { PersonCircle } from "react-bootstrap-icons";
 
 function SingleChat({ fetchChatsAgain, setFetchChatsAgain }) {
     const { user, selectedChat, setSelectedChat } = useContext(ChatContext);
+    const [showModal, setShowModal] = useState(false);
+    const [showGroupModal, setShowGroupModal] = useState(false);
     const singleChatContainerStyles = {
         backgroundColor: "white",
         width: "62vw",
@@ -21,7 +25,6 @@ function SingleChat({ fetchChatsAgain, setFetchChatsAgain }) {
         fontSize: "180%",
     };
     const selectedChatStyles = {
-        backgroundColor: "yellow",
         textAlign: "center",
         height: "100%",
     };
@@ -29,7 +32,7 @@ function SingleChat({ fetchChatsAgain, setFetchChatsAgain }) {
     const getOppositeUser = (loggedUser, users) => {
         // access the users array only after it's value is intialized (not undefined)
         if (users) {
-            return loggedUser._id === users[0]._id ? users[1] : loggedUser;
+            return loggedUser._id === users[0]._id ? users[1] : users[0];
         }
     };
 
@@ -75,10 +78,42 @@ function SingleChat({ fetchChatsAgain, setFetchChatsAgain }) {
                                 : getOppositeUser(user, selectedChat.users)
                                       .name}
                         </div>
-                        <div className="view-other-user-profile">
-                            <ProfileModal
-                                user={getOppositeUser(user, selectedChat.users)}
-                            />
+                        <div
+                            className="view-other-user-profile"
+                            style={{ margin: "0% 3%" }}
+                        >
+                            {!selectedChat.isGroupChat ? (
+                                <ProfileModal
+                                    show={showModal}
+                                    setShow={setShowModal}
+                                    info={getOppositeUser(
+                                        user,
+                                        selectedChat.users
+                                    )}
+                                >
+                                    <PersonCircle
+                                        color="lightblue"
+                                        size={30}
+                                        onClick={() => setShowModal(!showModal)}
+                                        cursor="pointer"
+                                    />
+                                </ProfileModal>
+                            ) : (
+                                <div>
+                                    <PersonCircle
+                                        color="lightblue"
+                                        size={30}
+                                        onClick={() =>
+                                            setShowGroupModal(!showModal)
+                                        }
+                                        cursor="pointer"
+                                    />
+                                    <UpdateGroupChatModal
+                                        show={showGroupModal}
+                                        setShow={setShowGroupModal}
+                                    ></UpdateGroupChatModal>
+                                </div>
+                            )}
                         </div>
                     </div>
                     <div className="singlechat-content">
