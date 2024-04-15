@@ -69,7 +69,7 @@ function SingleChat({ fetchChatsAgain, setFetchChatsAgain }) {
                 `http://localhost:3030/api/message/${selectedChat._id}`,
                 config
             );
-            console.log(data);
+            //console.log(data);
             setMessages(data);
         } catch (error) {
             console.log(error);
@@ -92,6 +92,7 @@ function SingleChat({ fetchChatsAgain, setFetchChatsAgain }) {
 
     const sendMessage = async (e) => {
         if (e.key === "Enter" && newMessage) {
+            e.target.value = "";
             try {
                 const config = {
                     headers: {
