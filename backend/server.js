@@ -79,4 +79,44 @@ app.use((err, req, res, next) => {
     });
 });
 
-app.listen(process.env.PORT || 3030, console.log(`this is my server`));
+const server = app.listen(
+    process.env.PORT || 3030,
+    console.log(`this is my server`)
+);
+const io = require("socket.io")(server, {
+    // ping time out is to close the connection if there is no activity between user for more than a specific period, here: 60sec
+    pingTimeout: 60000,
+    cors: {
+        origin: "http://localhost:3000",
+    },
+});
+
+io.on("connection", (socket) => {
+    console.log("connected to socket.io");
+    // here we are creating a socket where frontend sends some data to backend
+    // and a room is created
+    socket.on("setup", (userData) => {
+        // a room is created for that particular user
+        socket.join(userData._id);
+        //console.log(userData._id);
+        socket.emit("connected");
+    });
+
+    socket.on("join chat", (room) => {
+        socket.join(room);
+        console.log("user joined: ", room, " room");
+    });
+
+    socket.on("new message", (newMessageRecieved) => {
+        var chat = newMessageRecieved.chat;
+        if (!chat.user) {
+            return console.log("chat.users is not defined");
+        }
+        //sending a message to all receipient except to the sender himself.
+        chat.users.forEach((user) => {
+            if (user._id === newMessageRecieved.sender._id) return;
+            // sending the newMessageRecieved to user._id
+            socket.in(user._id).emit("message recieved", newMessageRecieved);
+        });
+    });
+});

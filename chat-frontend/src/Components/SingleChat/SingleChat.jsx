@@ -9,6 +9,12 @@ import { FormControl, Input, useToast } from "@chakra-ui/react";
 import axios from "axios";
 import ScrollableChat from "../ScrollableChat/ScrollableChat";
 
+import io from "socket.io-client";
+
+const ENDPOINT = "http://localhost:3030/";
+
+var socket, selectedChatCompare;
+
 function SingleChat({ fetchChatsAgain, setFetchChatsAgain }) {
     const { user, selectedChat, setSelectedChat } = useContext(ChatContext);
     const [showModal, setShowModal] = useState(false);
@@ -19,6 +25,17 @@ function SingleChat({ fetchChatsAgain, setFetchChatsAgain }) {
     const [newMessage, setNewMessage] = useState("");
     const [messages, setMessages] = useState([]);
     const [loading, setLoading] = useState(false);
+
+    const [socketConnected, setSocketConnected] = useState(false);
+
+    // we kept this useEffect to initialize the socket before using it in other sockets.
+    useEffect(() => {
+        socket = io(ENDPOINT);
+        socket.emit("setup", user);
+        socket.on("connection", () => {
+            setSocketConnected(true);
+        });
+    }, []);
 
     const toast = useToast();
     useEffect(() => {
@@ -71,6 +88,7 @@ function SingleChat({ fetchChatsAgain, setFetchChatsAgain }) {
             );
             //console.log(data);
             setMessages(data);
+            socket.emit("join chat", selectedChat._id);
         } catch (error) {
             console.log(error);
             toast({
@@ -88,7 +106,23 @@ function SingleChat({ fetchChatsAgain, setFetchChatsAgain }) {
 
     useEffect(() => {
         fetchMessages();
+        selectedChatCompare = selectedChat;
     }, [selectedChat]);
+
+    useEffect(() => {
+        socket.on("message recieved", (newMessageRecieved) => {
+            // this condition is to avoid the situation when the sender is sending us a message, but he/she is not the current selected chat.
+            if (
+                !selectedChatCompare ||
+                selectedChatCompare._id !== newMessageRecieved.chat._id
+            ) {
+                // give notification
+            } else {
+                setMessages([...messages, newMessageRecieved]);
+            }
+        });
+    });
+    // no dependency array for this useEffect because we want to execute it on every render.
 
     const sendMessage = async (e) => {
         if (e.key === "Enter" && newMessage) {
@@ -110,6 +144,7 @@ function SingleChat({ fetchChatsAgain, setFetchChatsAgain }) {
                 );
                 //console.log(data);
                 setNewMessage("");
+                socket.emit("new message", data);
                 setMessages([...messages, data]);
             } catch (error) {
                 console.log(error);

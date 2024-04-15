@@ -7,9 +7,10 @@ function ScrollableChat({ messages }) {
 
     const isLastSenderMessage = (messages, ind, userId) => {
         return (
-            ind < messages.length - 1 &&
-            messages[ind].sender._id !== userId &&
-            messages[ind + 1].sender._id === userId
+            (ind < messages.length - 1 &&
+                messages[ind].sender._id !== userId &&
+                messages[ind + 1].sender._id === userId) ||
+            (ind === messages.length - 1 && messages[ind].sender._id !== userId)
         );
     };
 
