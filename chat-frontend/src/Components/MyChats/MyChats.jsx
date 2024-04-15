@@ -6,9 +6,12 @@ import { Plus } from "react-bootstrap-icons";
 import { Stack } from "@chakra-ui/layout";
 import axios from "axios";
 import GroupChatCRUDModal from "../GroupChatCRUDModal/GroupChatCRUDModal";
+import Loader from "../Loader/Loader";
 
 function MyChats({ fetchChatsAgain }) {
+    // eslint-disable-next-line no-unused-vars
     const [loggedUser, setLoggerUser] = useState();
+    const [loading, setLoading] = useState(false);
     const { user, selectedChat, setSelectedChat, chats, setChats } =
         useContext(ChatContext);
     const toast = useToast();
@@ -16,6 +19,7 @@ function MyChats({ fetchChatsAgain }) {
     const userToken = user ? user.token : null;
     const fetchChats = async () => {
         try {
+            setLoading(true);
             const config = {
                 headers: {
                     Authorization: `Bearer ${userToken}`,
@@ -25,9 +29,10 @@ function MyChats({ fetchChatsAgain }) {
                 "http://localhost:3030/api/chat",
                 config
             );
-            console.log("chats:");
-            console.log(data);
+            //console.log("chats:");
+            //console.log(data);
             setChats(data);
+            console.log(data);
         } catch (error) {
             console.log(error);
             toast({
@@ -37,6 +42,8 @@ function MyChats({ fetchChatsAgain }) {
                 isClosable: true,
                 position: "top-left",
             });
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -46,6 +53,7 @@ function MyChats({ fetchChatsAgain }) {
             fetchChats();
         }
         // added 'user' object in the dependency array so that use effect is executed after change in user object.
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [user, chats.length, fetchChatsAgain]);
 
     // for group chat, we can display group name while showing chat list, but for 1v1 chat, we need to show the
@@ -87,9 +95,9 @@ function MyChats({ fetchChatsAgain }) {
                     <GroupChatCRUDModal>
                         <Button
                             d="flex"
-                            fontSize={{ base: "17px", md: "10px", lg: "17px" }}
+                            fontSize={{ base: "12px", md: "10px", lg: "17px" }}
                             rightIcon={<Plus />}
-                            m={2}
+                            my={2}
                         >
                             New Group Chat
                         </Button>
@@ -105,7 +113,7 @@ function MyChats({ fetchChatsAgain }) {
                     borderRadius="lg"
                     overflowY="hidden"
                 >
-                    {chats ? (
+                    {!loading && chats ? (
                         <Stack overflowY="scroll">
                             {chats.map((chat) => (
                                 <Box
@@ -130,16 +138,13 @@ function MyChats({ fetchChatsAgain }) {
                                     <Text>
                                         {chat.isGroupChat
                                             ? chat.chatName
-                                            : getOppositeUser(
-                                                  loggedUser,
-                                                  chat.users
-                                              )}
+                                            : getOppositeUser(user, chat.users)}
                                     </Text>
                                 </Box>
                             ))}
                         </Stack>
                     ) : (
-                        ""
+                        <Loader />
                     )}
                 </Box>
             </Box>

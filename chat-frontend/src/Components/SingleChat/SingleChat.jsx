@@ -1,14 +1,32 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { ChatContext } from "../../Context/ChatProvider";
 import { ArrowLeft } from "react-bootstrap-icons";
 import ProfileModal from "../ProfileModal/ProfileModal";
 import UpdateGroupChatModal from "../UpdateGroupChatModal/UpdateGroupChatModal";
 import { PersonCircle } from "react-bootstrap-icons";
+import Loader from "../Loader/Loader";
+import { FormControl, Input, useToast } from "@chakra-ui/react";
+import axios from "axios";
+import ScrollableChat from "../ScrollableChat/ScrollableChat";
 
 function SingleChat({ fetchChatsAgain, setFetchChatsAgain }) {
     const { user, selectedChat, setSelectedChat } = useContext(ChatContext);
     const [showModal, setShowModal] = useState(false);
     const [showGroupModal, setShowGroupModal] = useState(false);
+
+    const [userToken, setUserToken] = useState(user ? user.token : null);
+
+    const [newMessage, setNewMessage] = useState("");
+    const [messages, setMessages] = useState([]);
+    const [loading, setLoading] = useState(false);
+
+    const toast = useToast();
+    useEffect(() => {
+        if (user) {
+            setUserToken(user.token);
+        }
+    }, [userToken, user]);
+
     const singleChatContainerStyles = {
         backgroundColor: "white",
         width: "62vw",
@@ -34,6 +52,81 @@ function SingleChat({ fetchChatsAgain, setFetchChatsAgain }) {
         if (users) {
             return loggedUser._id === users[0]._id ? users[1] : users[0];
         }
+    };
+
+    const fetchMessages = async () => {
+        if (!selectedChat) {
+            return;
+        }
+        try {
+            setLoading(true);
+            const config = {
+                headers: {
+                    Authorization: `Bearer ${userToken}`,
+                },
+            };
+            const { data } = await axios.get(
+                `http://localhost:3030/api/message/${selectedChat._id}`,
+                config
+            );
+            console.log(data);
+            setMessages(data);
+        } catch (error) {
+            console.log(error);
+            toast({
+                title: "Oops! error occured",
+                description: "Failed to load messages",
+                status: "error",
+                duration: "5000",
+                isClosable: true,
+                position: "top-left",
+            });
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        fetchMessages();
+    }, [selectedChat]);
+
+    const sendMessage = async (e) => {
+        if (e.key === "Enter" && newMessage) {
+            try {
+                const config = {
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${userToken}`,
+                    },
+                };
+                const { data } = await axios.post(
+                    "http://localhost:3030/api/message",
+                    {
+                        content: newMessage,
+                        chatId: selectedChat._id,
+                    },
+                    config
+                );
+                //console.log(data);
+                setNewMessage("");
+                setMessages([...messages, data]);
+            } catch (error) {
+                console.log(error);
+                toast({
+                    title: "Oops! error occured",
+                    description: "Failed to send message",
+                    status: "error",
+                    duration: "5500",
+                    isClosable: true,
+                    position: "top-left",
+                });
+            }
+        }
+    };
+
+    const handleTyping = (e) => {
+        setNewMessage(e.target.value);
+        //typing indication
     };
 
     return (
@@ -71,7 +164,7 @@ function SingleChat({ fetchChatsAgain, setFetchChatsAgain }) {
                         />
                         <div
                             className="heading-content"
-                            style={{ width: "100%" }}
+                            style={{ width: "100%", textAlign: "start" }}
                         >
                             {selectedChat.isGroupChat
                                 ? selectedChat.chatName.toUpperCase()
@@ -111,14 +204,36 @@ function SingleChat({ fetchChatsAgain, setFetchChatsAgain }) {
                                     <UpdateGroupChatModal
                                         show={showGroupModal}
                                         setShow={setShowGroupModal}
+                                        fetchChatsAgain={fetchChatsAgain}
+                                        setFetchChatsAgain={setFetchChatsAgain}
+                                        fetchMessages={fetchMessages}
                                     ></UpdateGroupChatModal>
                                 </div>
                             )}
                         </div>
                     </div>
-                    <div className="singlechat-content">
-                        Single chat content
+                    <div
+                        style={{ backgroundColor: "lightgray", height: "80%" }}
+                        className="singlechat-content-container"
+                    >
+                        {loading ? (
+                            <Loader />
+                        ) : (
+                            <div className="single-chat-content">
+                                <ScrollableChat messages={messages} />
+                            </div>
+                        )}
                     </div>
+                    <FormControl onKeyDown={sendMessage} isRequired mt={3}>
+                        <Input
+                            variant="filled"
+                            bg="whitesmoke"
+                            placeholder="Type a message"
+                            onChange={handleTyping}
+                            mx={1}
+                            width="90%"
+                        />
+                    </FormControl>
                 </div>
             )}
         </div>
