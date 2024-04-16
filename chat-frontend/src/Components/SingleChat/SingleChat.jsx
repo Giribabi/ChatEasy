@@ -64,15 +64,8 @@ function SingleChat({ fetchChatsAgain, setFetchChatsAgain }) {
         height: "100%",
     };
 
-    const getOppositeUser = (loggedUser, users) => {
-        // access the users array only after it's value is intialized (not undefined)
-        if (users) {
-            return loggedUser._id === users[0]._id ? users[1] : users[0];
-        }
-    };
-
     const fetchMessages = async () => {
-        if (!selectedChat) {
+        if (!selectedChat || !selectedChat._id) {
             return;
         }
         try {
@@ -105,8 +98,10 @@ function SingleChat({ fetchChatsAgain, setFetchChatsAgain }) {
     };
 
     useEffect(() => {
-        fetchMessages();
-        selectedChatCompare = selectedChat;
+        if (selectedChat) {
+            fetchMessages();
+            selectedChatCompare = selectedChat;
+        }
     }, [selectedChat]);
 
     useEffect(() => {
@@ -198,55 +193,59 @@ function SingleChat({ fetchChatsAgain, setFetchChatsAgain }) {
                                 setSelectedChat("");
                             }}
                         />
-                        <div
-                            className="heading-content"
-                            style={{ width: "100%", textAlign: "start" }}
-                        >
-                            {selectedChat.isGroupChat
-                                ? selectedChat.chatName.toUpperCase()
-                                : getOppositeUser(user, selectedChat.users)
-                                      .name}
-                        </div>
-                        <div
-                            className="view-other-user-profile"
-                            style={{ margin: "0% 3%" }}
-                        >
-                            {!selectedChat.isGroupChat ? (
-                                <ProfileModal
-                                    show={showModal}
-                                    setShow={setShowModal}
-                                    info={getOppositeUser(
-                                        user,
-                                        selectedChat.users
-                                    )}
-                                >
-                                    <PersonCircle
-                                        color="lightblue"
-                                        size={30}
-                                        onClick={() => setShowModal(!showModal)}
-                                        cursor="pointer"
-                                    />
-                                </ProfileModal>
-                            ) : (
-                                <div>
-                                    <PersonCircle
-                                        color="lightblue"
-                                        size={30}
-                                        onClick={() =>
-                                            setShowGroupModal(!showModal)
-                                        }
-                                        cursor="pointer"
-                                    />
-                                    <UpdateGroupChatModal
-                                        show={showGroupModal}
-                                        setShow={setShowGroupModal}
-                                        fetchChatsAgain={fetchChatsAgain}
-                                        setFetchChatsAgain={setFetchChatsAgain}
-                                        fetchMessages={fetchMessages}
-                                    ></UpdateGroupChatModal>
-                                </div>
-                            )}
-                        </div>
+                        {selectedChat && selectedChat.users && (
+                            <div
+                                className="heading-content"
+                                style={{ width: "100%", textAlign: "start" }}
+                            >
+                                {selectedChat.isGroupChat
+                                    ? selectedChat.chatName.toUpperCase()
+                                    : selectedChat.users[1].name}
+                            </div>
+                        )}
+                        {selectedChat && selectedChat.users && (
+                            <div
+                                className="view-other-user-profile"
+                                style={{ margin: "0% 3%" }}
+                            >
+                                {!selectedChat.isGroupChat ? (
+                                    <ProfileModal
+                                        show={showModal}
+                                        setShow={setShowModal}
+                                        info={selectedChat.users[1]}
+                                    >
+                                        <PersonCircle
+                                            color="lightblue"
+                                            size={30}
+                                            onClick={() =>
+                                                setShowModal(!showModal)
+                                            }
+                                            cursor="pointer"
+                                        />
+                                    </ProfileModal>
+                                ) : (
+                                    <div>
+                                        <PersonCircle
+                                            color="lightblue"
+                                            size={30}
+                                            onClick={() =>
+                                                setShowGroupModal(!showModal)
+                                            }
+                                            cursor="pointer"
+                                        />
+                                        <UpdateGroupChatModal
+                                            show={showGroupModal}
+                                            setShow={setShowGroupModal}
+                                            fetchChatsAgain={fetchChatsAgain}
+                                            setFetchChatsAgain={
+                                                setFetchChatsAgain
+                                            }
+                                            fetchMessages={fetchMessages}
+                                        ></UpdateGroupChatModal>
+                                    </div>
+                                )}
+                            </div>
+                        )}
                     </div>
                     <div
                         style={{ backgroundColor: "lightgray", height: "80%" }}

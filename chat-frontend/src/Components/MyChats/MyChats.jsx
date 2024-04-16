@@ -32,7 +32,7 @@ function MyChats({ fetchChatsAgain }) {
             //console.log("chats:");
             //console.log(data);
             setChats(data);
-            console.log(data);
+            //console.log(data);
         } catch (error) {
             console.log(error);
             toast({

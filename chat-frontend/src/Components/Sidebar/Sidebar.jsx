@@ -171,7 +171,7 @@ function Sidebar() {
                                 mr={2}
                                 size="sm"
                                 cursor="pointer"
-                                name={user.name}
+                                //name={user.name}
                                 src={user.pic}
                             />
                         </Dropdown.Toggle>
