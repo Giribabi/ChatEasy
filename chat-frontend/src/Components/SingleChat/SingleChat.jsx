@@ -25,6 +25,8 @@ function SingleChat({ fetchChatsAgain, setFetchChatsAgain }) {
     const [newMessage, setNewMessage] = useState("");
     const [messages, setMessages] = useState([]);
     const [loading, setLoading] = useState(false);
+    const [typing, setTyping] = useState(false);
+    const [isTyping, setIsTyping] = useState(false);
 
     const [socketConnected, setSocketConnected] = useState(false);
 
@@ -32,9 +34,11 @@ function SingleChat({ fetchChatsAgain, setFetchChatsAgain }) {
     useEffect(() => {
         socket = io(ENDPOINT);
         socket.emit("setup", user);
-        socket.on("connection", () => {
+        socket.on("connected", () => {
             setSocketConnected(true);
         });
+        socket.on("typing", () => setTyping(true));
+        socket.on("stop typing", () => setIsTyping(false));
     }, []);
 
     const toast = useToast();
@@ -121,6 +125,7 @@ function SingleChat({ fetchChatsAgain, setFetchChatsAgain }) {
 
     const sendMessage = async (e) => {
         if (e.key === "Enter" && newMessage) {
+            socket.emit("stop typing", selectedChat._id);
             e.target.value = "";
             try {
                 const config = {
@@ -158,6 +163,24 @@ function SingleChat({ fetchChatsAgain, setFetchChatsAgain }) {
     const handleTyping = (e) => {
         setNewMessage(e.target.value);
         //typing indication
+        if (!socketConnected) {
+            return;
+        }
+        if (!typing) {
+            setTyping(true);
+            socket.emit("typing", selectedChat._id);
+        }
+        //debouncing or throttling
+        let lastTypingTime = new Date().getTIme();
+        var timeOutLength = 3000;
+        setTimeout(() => {
+            var timeNow = new Date().getTime();
+            var timeDiff = timeNow - lastTypingTime;
+            if (timeDiff >= timeOutLength && typing) {
+                socket.emit("stop typing", selectedChat._id);
+                setTyping(false);
+            }
+        }, timeOutLength);
     };
 
     return (
@@ -200,7 +223,9 @@ function SingleChat({ fetchChatsAgain, setFetchChatsAgain }) {
                             >
                                 {selectedChat.isGroupChat
                                     ? selectedChat.chatName.toUpperCase()
-                                    : selectedChat.users[1].name}
+                                    : selectedChat.users[0]._id === user._id
+                                    ? selectedChat.users[1].name
+                                    : selectedChat.users[0].name}
                             </div>
                         )}
                         {selectedChat && selectedChat.users && (
@@ -260,6 +285,7 @@ function SingleChat({ fetchChatsAgain, setFetchChatsAgain }) {
                         )}
                     </div>
                     <FormControl onKeyDown={sendMessage} isRequired mt={3}>
+                        {isTyping ? <div>Typing...</div> : ""}
                         <Input
                             variant="filled"
                             bg="whitesmoke"

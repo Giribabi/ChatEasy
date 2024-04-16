@@ -135,11 +135,15 @@ function MyChats({ fetchChatsAgain }) {
                                     borderRadius="lg"
                                     key={chat._id}
                                 >
-                                    <Text>
-                                        {chat.isGroupChat
-                                            ? chat.chatName
-                                            : getOppositeUser(user, chat.users)}
-                                    </Text>
+                                    {chat.users && (
+                                        <Text>
+                                            {chat.isGroupChat
+                                                ? chat.chatName
+                                                : chat.users[0]._id === user._id
+                                                ? chat.users[1].name
+                                                : chat.users[0].name}
+                                        </Text>
+                                    )}
                                 </Box>
                             ))}
                         </Stack>
