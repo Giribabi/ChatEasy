@@ -34,7 +34,14 @@ function Sidebar() {
     //const [selectedChat, setSelectedChat] = useState();
     const { isOpen, onOpen, onClose } = useDisclosure();
 
-    const { user, setSelectedChat, chats, setChats } = useContext(ChatContext);
+    const {
+        user,
+        setSelectedChat,
+        chats,
+        setChats,
+        notifications,
+        setNotifications,
+    } = useContext(ChatContext);
     const navigate = useNavigate();
 
     const handleLogOut = () => {
@@ -153,11 +160,59 @@ function Sidebar() {
                     <Dropdown>
                         <Dropdown.Toggle variant="outline-secondary">
                             <Bell style={{ display: "inline" }} />
+                            <span
+                                style={{
+                                    color: "#03C04A",
+                                    borderRadius: "5em",
+                                    fontWeight: "700",
+                                    padding: "0% 5%",
+                                    margin: "5%",
+                                }}
+                            >
+                                {notifications.length === 0
+                                    ? "-"
+                                    : `${notifications.length}`}
+                            </span>
                         </Dropdown.Toggle>
                         <Dropdown.Menu>
-                            <Dropdown.Item>Action 1</Dropdown.Item>
-                            <Dropdown.Item>Action 2</Dropdown.Item>
-                            <Dropdown.Item>Action 3</Dropdown.Item>
+                            {!notifications.length && (
+                                <Dropdown.Item>No new messages</Dropdown.Item>
+                            )}
+                            {notifications.length > 0 && (
+                                <div className="notifications">
+                                    {notifications.map(
+                                        (notification, index) => (
+                                            <Dropdown.Item
+                                                key={
+                                                    notification._id +
+                                                    `${index}`
+                                                }
+                                                onClick={() => {
+                                                    setSelectedChat(
+                                                        notification.chat
+                                                    );
+                                                    setNotifications(
+                                                        notifications.filter(
+                                                            (notif) =>
+                                                                notif !==
+                                                                notification
+                                                        )
+                                                    );
+                                                }}
+                                            >
+                                                {notification.chat.isGroupChat
+                                                    ? `${notification.chat.chatName}`
+                                                    : notification.chat.users[0]
+                                                          ._id === user._id
+                                                    ? notification.chat.users[1]
+                                                          .name
+                                                    : notification.chat.users[0]
+                                                          .name}
+                                            </Dropdown.Item>
+                                        )
+                                    )}
+                                </div>
+                            )}
                         </Dropdown.Menu>
                     </Dropdown>
                 </div>

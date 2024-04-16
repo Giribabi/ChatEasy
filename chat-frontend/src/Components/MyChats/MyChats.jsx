@@ -56,17 +56,6 @@ function MyChats({ fetchChatsAgain }) {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [user, chats.length, fetchChatsAgain]);
 
-    // for group chat, we can display group name while showing chat list, but for 1v1 chat, we need to show the
-    //user name who is not logged in the current device
-    const getOppositeUser = (loggedUser, users) => {
-        // access the users array only after it's value is intialized (not undefined)
-        if (users) {
-            return loggedUser._id === users[0]._id
-                ? users[1].name
-                : loggedUser.name;
-        }
-    };
-
     return (
         <div>
             <Box

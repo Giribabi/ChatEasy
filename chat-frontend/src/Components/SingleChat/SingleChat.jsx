@@ -47,6 +47,7 @@ function SingleChat({ fetchChatsAgain, setFetchChatsAgain }) {
         });
         socket.on("typing", () => setTyping(true));
         socket.on("stop typing", () => setIsTyping(false));
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const toast = useToast();
@@ -125,6 +126,7 @@ function SingleChat({ fetchChatsAgain, setFetchChatsAgain }) {
                 selectedChatCompare._id !== newMessageRecieved.chat._id
             ) {
                 // give notification
+                console.log("entered notifications");
                 if (!notifications.includes(newMessageRecieved)) {
                     setNotifications([newMessageRecieved, ...notifications]);
                     setFetchChatsAgain(!fetchChatsAgain);
@@ -156,7 +158,7 @@ function SingleChat({ fetchChatsAgain, setFetchChatsAgain }) {
                     config
                 );
                 //console.log(data);
-                //console.log("notifications array:",notifications);
+                console.log("notifications array:", notifications);
                 setNewMessage("");
                 socket.emit("new message", data);
                 setMessages([...messages, data]);
