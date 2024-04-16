@@ -18,7 +18,13 @@ const ENDPOINT = "http://localhost:3030/";
 var socket, selectedChatCompare;
 
 function SingleChat({ fetchChatsAgain, setFetchChatsAgain }) {
-    const { user, selectedChat, setSelectedChat } = useContext(ChatContext);
+    const {
+        user,
+        selectedChat,
+        setSelectedChat,
+        notifications,
+        setNotifications,
+    } = useContext(ChatContext);
     const [showModal, setShowModal] = useState(false);
     const [showGroupModal, setShowGroupModal] = useState(false);
 
@@ -108,6 +114,7 @@ function SingleChat({ fetchChatsAgain, setFetchChatsAgain }) {
             fetchMessages();
             selectedChatCompare = selectedChat;
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [selectedChat]);
 
     useEffect(() => {
@@ -118,6 +125,10 @@ function SingleChat({ fetchChatsAgain, setFetchChatsAgain }) {
                 selectedChatCompare._id !== newMessageRecieved.chat._id
             ) {
                 // give notification
+                if (!notifications.includes(newMessageRecieved)) {
+                    setNotifications([newMessageRecieved, ...notifications]);
+                    setFetchChatsAgain(!fetchChatsAgain);
+                }
             } else {
                 setMessages([...messages, newMessageRecieved]);
             }
@@ -145,6 +156,7 @@ function SingleChat({ fetchChatsAgain, setFetchChatsAgain }) {
                     config
                 );
                 //console.log(data);
+                //console.log("notifications array:",notifications);
                 setNewMessage("");
                 socket.emit("new message", data);
                 setMessages([...messages, data]);
@@ -173,7 +185,7 @@ function SingleChat({ fetchChatsAgain, setFetchChatsAgain }) {
             socket.emit("typing", selectedChat._id);
         }
         //debouncing or throttling
-        let lastTypingTime = new Date().getTIme();
+        let lastTypingTime = new Date().getTime();
         var timeOutLength = 3000;
         setTimeout(() => {
             var timeNow = new Date().getTime();

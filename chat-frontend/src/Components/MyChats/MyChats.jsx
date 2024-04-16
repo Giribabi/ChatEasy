@@ -115,7 +115,7 @@ function MyChats({ fetchChatsAgain }) {
                 >
                     {!loading && chats ? (
                         <Stack overflowY="scroll">
-                            {chats.map((chat) => (
+                            {chats.map((chat, index) => (
                                 <Box
                                     onClick={() => setSelectedChat(chat)}
                                     cursor="pointer"
@@ -133,7 +133,7 @@ function MyChats({ fetchChatsAgain }) {
                                     py={2}
                                     mx={2}
                                     borderRadius="lg"
-                                    key={chat._id}
+                                    key={`${index}` + chat._id}
                                 >
                                     {chat.users && (
                                         <Text>

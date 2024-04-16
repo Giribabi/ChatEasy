@@ -217,7 +217,7 @@ function UpdateGroupChatModal({
                     </Modal.Header>
                     <Modal.Body>
                         <div className="group-participants">
-                            {selectedChat.users.map((u) => (
+                            {selectedChat.users.map((u, index) => (
                                 <div
                                     style={{
                                         width: "30vw",
@@ -232,6 +232,7 @@ function UpdateGroupChatModal({
                                         margin: "2%",
                                     }}
                                     onClick={() => handleExitGroup(u)}
+                                    key={`${index}` + u.name}
                                 >
                                     {u.name + " X"}
                                 </div>
@@ -272,10 +273,10 @@ function UpdateGroupChatModal({
                             {loading ? (
                                 <Loader />
                             ) : (
-                                searchedResult?.slice(0, 4).map((u) => (
+                                searchedResult?.slice(0, 4).map((u, index) => (
                                     <div
                                         onClick={() => handleAddUser(u)}
-                                        key={u._id}
+                                        key={u._id + `${index}`}
                                     >
                                         <UserListItem key={u._id} user={u} />
                                     </div>

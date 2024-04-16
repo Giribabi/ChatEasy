@@ -112,7 +112,7 @@ io.on("connection", (socket) => {
 
     socket.on("new message", (newMessageRecieved) => {
         var chat = newMessageRecieved.chat;
-        if (!chat.user) {
+        if (!chat.users) {
             return console.log("chat.users is not defined");
         }
         //sending a message to all receipient except to the sender himself.
@@ -121,5 +121,9 @@ io.on("connection", (socket) => {
             // sending the newMessageRecieved to user._id
             socket.in(user._id).emit("message recieved", newMessageRecieved);
         });
+    });
+    socket.off("setup", () => {
+        console.log("user disconnected");
+        socket.leave(userData._id);
     });
 });

@@ -219,8 +219,11 @@ function Sidebar() {
                         {loading ? (
                             <ChatLoading />
                         ) : (
-                            searchResult?.map((user) => (
-                                <div onClick={() => accessChat(user._id)}>
+                            searchResult?.map((user, index) => (
+                                <div
+                                    onClick={() => accessChat(user._id)}
+                                    key={`${index}` + user._id}
+                                >
                                     <UserListItem key={user._id} user={user} />
                                 </div>
                             ))

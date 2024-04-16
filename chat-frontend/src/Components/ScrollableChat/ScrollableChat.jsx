@@ -31,6 +31,7 @@ function ScrollableChat({ messages }) {
                                     : "flex-start",
                             margin: "0.5em",
                         }}
+                        key={`${index}` + m.sender._id}
                     >
                         <div
                             className=""

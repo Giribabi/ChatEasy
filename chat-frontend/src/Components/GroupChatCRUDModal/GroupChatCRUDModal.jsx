@@ -162,7 +162,7 @@ function GroupChatCRUDModal({ children }) {
                                 onChange={(e) => handleSearch(e.target.value)}
                             />
                         </form>
-                        {selectedUsers?.map((selectedUser) => (
+                        {selectedUsers?.map((selectedUser, index) => (
                             // you left here
                             <div
                                 className="selected-user-for-group"
@@ -172,7 +172,7 @@ function GroupChatCRUDModal({ children }) {
                                     margin: "2%",
                                     padding: "1%",
                                 }}
-                                key={user._id}
+                                key={user._id + `${index}`}
                             >
                                 <div
                                     className="selected-user-name"
