@@ -1,6 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 const app = express();
+const path = require("path");
 // app.use(
 //     cors({
 //         origin: "http://localhost:3000",
@@ -21,11 +22,7 @@ const mongoose = require("mongoose");
 async function connectDB() {
     try {
         const connection = await mongoose.connect(
-            "mongodb+srv://sammidigiridhar:1$=SeventyRupees@cluster0.ktb6zi2.mongodb.net/?retryWrites=true&w=majority",
-            {
-                useNewUrlParser: true,
-                useUnifiedTopology: true,
-            }
+            "mongodb+srv://sammidigiridhar:1$=SeventyRupees@cluster0.ktb6zi2.mongodb.net/?retryWrites=true&w=majority"
         );
     } catch (err) {
         console.log(`Error: ${err.message}`.red.bold);
@@ -51,10 +48,6 @@ app.use((req, res, next) => {
 // this is to intercept every request of json type: (body parser)
 app.use(express.json());
 
-app.get("/", (req, res) => {
-    res.send("This is your server");
-});
-
 app.get("/api/chat/:id", (req, res) => {
     // console.log(req.params.id);
     const singleChat = chats.find((chat) => chat._id == req.params.id);
@@ -64,6 +57,18 @@ app.get("/api/chat/:id", (req, res) => {
 app.use("/api/user", userRoutes);
 app.use("/api/chat", chatRoutes);
 app.use("/api/message", messageRoutes);
+
+/*************DEPLOYMENT *************/
+
+const __dirname1 = path.resolve();
+// for production:
+app.use(express.static(path.join(__dirname1, "/frontend/build")));
+
+app.get("*", (req, res) => {
+    res.sendFile(path.resolve(__dirname1, "frontend", "build", "index.html"));
+});
+
+/*************DEPLOYMENT *************/
 
 /***********for page errors */
 app.use((req, res, next) => {
@@ -79,10 +84,8 @@ app.use((err, req, res, next) => {
     });
 });
 
-const server = app.listen(
-    process.env.PORT || 3030,
-    console.log(`this is my server`)
-);
+const server = app.listen("3030", console.log(`this is my server `));
+
 const io = require("socket.io")(server, {
     // ping time out is to close the connection if there is no activity between user for more than a specific period, here: 60sec
     pingTimeout: 60000,
