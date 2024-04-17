@@ -3,6 +3,7 @@ import show_password from "./../../assets/show-password.png";
 import hide_password from "./../../assets/hide-password.png";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { useToast } from "@chakra-ui/react";
 
 // add loader while image is uploading and while sending data to backend
 
@@ -15,9 +16,17 @@ function Signup() {
     const [show, setShow] = useState(false);
     const navigate = useNavigate();
 
+    const toast = useToast();
+
     const postPic = (pic) => {
         if (pic === undefined) {
-            window.alert("Select an image");
+            toast({
+                title: "Select an image",
+                status: "warning",
+                duration: "5500",
+                isClosable: true,
+                position: "top-left",
+            });
             return;
         }
         if (pic.type === "image/jpeg" || pic.type === "image/png") {
@@ -37,18 +46,43 @@ function Signup() {
                 })
                 .catch((err) => {
                     console.log(err);
+                    toast({
+                        title: "Error in uploading image",
+                        status: "error",
+                        duration: "5000",
+                        isClosable: true,
+                        position: "top-left",
+                    });
                 });
         } else {
-            window.alert("Select an image");
+            toast({
+                title: "Select an image",
+                status: "warning",
+                duration: "5500",
+                isClosable: true,
+                position: "top-left",
+            });
         }
     };
 
     const handleSubmit = async () => {
         if (!name || !email || !password || !confirmPassword) {
-            window.alert("Enter all the fields");
+            toast({
+                title: "Enter all the fields",
+                status: "warning",
+                duration: "5500",
+                isClosable: true,
+                position: "top-left",
+            });
         }
         if (password !== confirmPassword) {
-            window.alert("Check your passwords");
+            toast({
+                title: "Check your password",
+                status: "warning",
+                duration: "5500",
+                isClosable: true,
+                position: "top-left",
+            });
         }
         try {
             const config = {
@@ -70,7 +104,14 @@ function Signup() {
             localStorage.setItem("userInfo", JSON.stringify(data));
             navigate("/chats");
         } catch (err) {
-            window.alert(`Error occured ${err.response.data.message}`);
+            toast({
+                title: "Error in registration",
+                description: err.response.data.message,
+                status: "warning",
+                duration: "5500",
+                isClosable: true,
+                position: "top-left",
+            });
         }
     };
 
