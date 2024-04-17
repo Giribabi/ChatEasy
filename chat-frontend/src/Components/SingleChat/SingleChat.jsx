@@ -24,6 +24,7 @@ function SingleChat({ fetchChatsAgain, setFetchChatsAgain }) {
         setSelectedChat,
         notifications,
         setNotifications,
+        windowWidth,
     } = useContext(ChatContext);
     const [showModal, setShowModal] = useState(false);
     const [showGroupModal, setShowGroupModal] = useState(false);
@@ -59,7 +60,7 @@ function SingleChat({ fetchChatsAgain, setFetchChatsAgain }) {
 
     const singleChatContainerStyles = {
         backgroundColor: "white",
-        width: "62vw",
+        width: windowWidth < 700 ? "95vw" : "62vw",
         height: "89vh",
         borderRadius: "1em",
         margin: "1% 3%",

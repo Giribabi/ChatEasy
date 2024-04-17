@@ -10,6 +10,16 @@ const ChatProvider = ({ children }) => {
     const [chats, setChats] = useState([]);
     const [notifications, setNotifications] = useState([]);
     const navigate = useNavigate();
+    const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+
+    //console.log(windowWidth);
+    useEffect(() => {
+        const handleResize = () => {
+            console.log(windowWidth);
+            setWindowWidth(window.innerWidth);
+        };
+        window.addEventListener("resize", handleResize);
+    }, [windowWidth]);
     useEffect(() => {
         const currentUser = JSON.parse(localStorage.getItem("userInfo"));
         setUser(currentUser);
@@ -31,6 +41,7 @@ const ChatProvider = ({ children }) => {
                     setChats,
                     notifications,
                     setNotifications,
+                    windowWidth,
                 }}
             >
                 {children}

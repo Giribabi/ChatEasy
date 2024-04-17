@@ -12,8 +12,14 @@ function MyChats({ fetchChatsAgain }) {
     // eslint-disable-next-line no-unused-vars
     const [loggedUser, setLoggerUser] = useState();
     const [loading, setLoading] = useState(false);
-    const { user, selectedChat, setSelectedChat, chats, setChats } =
-        useContext(ChatContext);
+    const {
+        user,
+        selectedChat,
+        setSelectedChat,
+        chats,
+        setChats,
+        windowWidth,
+    } = useContext(ChatContext);
     const toast = useToast();
     // check whether the 'user' object is available or not before accessing 'user.token'
     const userToken = user ? user.token : null;
@@ -64,7 +70,7 @@ function MyChats({ fetchChatsAgain }) {
                 alignItems="center"
                 p={3}
                 bg="white"
-                w="35vw"
+                w={windowWidth < 700 ? "95vw" : "35vw"}
                 h="89vh"
                 borderRadius="lg"
                 borderWidth="1px"
