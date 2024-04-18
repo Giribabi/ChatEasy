@@ -46,7 +46,13 @@ function Login() {
             localStorage.setItem("userInfo", JSON.stringify(data));
             navigate("/chats");
         } catch (err) {
-            window.alert(`Error occured! Check your credentials`);
+            toast({
+                title: "Error occured, check your credentials",
+                status: "error",
+                duration: "5000",
+                isClosable: true,
+                position: "top-left",
+            });
         }
     };
 
