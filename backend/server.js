@@ -2,7 +2,12 @@ const express = require("express");
 const cors = require("cors");
 const app = express();
 const path = require("path");
-app.use(cors());
+app.use(
+    cors({
+        origin: "https://xyxksd-chateasy-1.onrender.com",
+        allowedHeaders: ["Content-Type", "Authorization"], // Specify the allowed headers
+    })
+);
 const dotenv = require("dotenv");
 const { chats } = require("./data/data");
 const colors = require("colors");
@@ -86,6 +91,9 @@ const server = app.listen("3030", console.log(`this is my server `));
 const io = require("socket.io")(server, {
     // ping time out is to close the connection if there is no activity between user for more than a specific period, here: 60sec
     pingTimeout: 60000,
+    cors: {
+        origin: "https://xyxksd-chateasy-1.onrender.com",
+    },
 });
 
 io.on("connection", (socket) => {
