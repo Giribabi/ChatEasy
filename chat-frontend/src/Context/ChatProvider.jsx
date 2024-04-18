@@ -15,7 +15,7 @@ const ChatProvider = ({ children }) => {
     //console.log(windowWidth);
     useEffect(() => {
         const handleResize = () => {
-            console.log(windowWidth);
+            //console.log(windowWidth);
             setWindowWidth(window.innerWidth);
         };
         window.addEventListener("resize", handleResize);
