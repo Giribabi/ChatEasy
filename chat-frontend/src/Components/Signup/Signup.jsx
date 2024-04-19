@@ -100,7 +100,13 @@ function Signup() {
                 },
                 config
             );
-            window.alert("Successfully registered");
+            toast({
+                title: "Successfully registered",
+                status: "warning",
+                duration: "5000",
+                isClosable: true,
+                position: "top-left",
+            });
             localStorage.setItem("userInfo", JSON.stringify(data));
             navigate("/chats");
         } catch (err) {
