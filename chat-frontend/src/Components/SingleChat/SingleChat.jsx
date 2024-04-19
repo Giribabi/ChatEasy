@@ -263,7 +263,12 @@ function SingleChat({ fetchChatsAgain, setFetchChatsAgain }) {
                                     <ProfileModal
                                         show={showModal}
                                         setShow={setShowModal}
-                                        info={selectedChat.users[1]}
+                                        info={
+                                            selectedChat.users[0]._id ===
+                                            user._id
+                                                ? selectedChat.users[1]
+                                                : selectedChat.users[0]
+                                        }
                                     >
                                         <PersonCircle
                                             color="lightblue"
