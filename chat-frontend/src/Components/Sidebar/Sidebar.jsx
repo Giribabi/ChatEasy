@@ -63,7 +63,7 @@ function Sidebar() {
                 },
             };
             const { data } = await axios.post(
-                "http://localhost:3030/api/chat",
+                "https://chateasy-1.onrender.com/api/chat",
                 { userId },
                 config
             );
@@ -107,7 +107,7 @@ function Sidebar() {
                 },
             };
             const { data } = await axios.get(
-                `http://localhost:3030/api/user?search=${search}`,
+                `https://chateasy-1.onrender.com/api/user?search=${search}`,
                 config
             );
             //console.log("fetched data:");

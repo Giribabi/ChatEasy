@@ -91,7 +91,7 @@ function Signup() {
                 },
             };
             const { data } = await axios.post(
-                " http://localhost:3030/api/user",
+                " https://chateasy-1.onrender.com/api/user",
                 {
                     name,
                     email,

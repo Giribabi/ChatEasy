@@ -32,7 +32,7 @@ function MyChats({ fetchChatsAgain }) {
                 },
             };
             const { data } = await axios.get(
-                "http://localhost:3030/api/chat",
+                "https://chateasy-1.onrender.com/api/chat",
                 config
             );
             //console.log("chats:");

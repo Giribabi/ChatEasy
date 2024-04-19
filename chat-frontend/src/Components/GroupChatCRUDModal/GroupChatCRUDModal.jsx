@@ -45,7 +45,7 @@ function GroupChatCRUDModal({ children }) {
                 },
             };
             const { data } = await axios.get(
-                `http://localhost:3030/api/user?search=${query}`,
+                `https://chateasy-1.onrender.com/api/user?search=${query}`,
                 config
             );
             //console.log(data);
@@ -81,7 +81,7 @@ function GroupChatCRUDModal({ children }) {
                 },
             };
             const { data } = await axios.post(
-                "http://localhost:3030/api/chat/creategroup",
+                "https://chateasy-1.onrender.com/api/chat/creategroup",
                 {
                     name: groupChatName,
                     users: JSON.stringify(selectedUsers.map((u) => u._id)),

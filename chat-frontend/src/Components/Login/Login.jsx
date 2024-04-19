@@ -29,7 +29,7 @@ function Login() {
                 },
             };
             const { data } = await axios.post(
-                " http://localhost:3030/api/user/login",
+                " https://chateasy-1.onrender.com/api/user/login",
                 {
                     email,
                     password,

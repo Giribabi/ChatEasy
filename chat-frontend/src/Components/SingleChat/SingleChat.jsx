@@ -13,7 +13,7 @@ import Lottie from "react-lottie";
 import io from "socket.io-client";
 import animationData from "../animations/typing.json";
 
-const ENDPOINT = "http://localhost:3030/";
+const ENDPOINT = "https://chateasy-1.onrender.com/";
 
 var socket, selectedChatCompare;
 
@@ -90,7 +90,7 @@ function SingleChat({ fetchChatsAgain, setFetchChatsAgain }) {
                 },
             };
             const { data } = await axios.get(
-                `http://localhost:3030/api/message/${selectedChat._id}`,
+                `https://chateasy-1.onrender.com/api/message/${selectedChat._id}`,
                 config
             );
             //console.log(data);
@@ -151,7 +151,7 @@ function SingleChat({ fetchChatsAgain, setFetchChatsAgain }) {
                     },
                 };
                 const { data } = await axios.post(
-                    "http://localhost:3030/api/message",
+                    "https://chateasy-1.onrender.com/api/message",
                     {
                         content: newMessage,
                         chatId: selectedChat._id,
