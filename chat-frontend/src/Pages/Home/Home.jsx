@@ -16,7 +16,7 @@ function Home() {
     }, [navigate]);
     return (
         <div className="home-container">
-            <div className="home-page-heading">CHATEASY</div>
+            {/* <div className="home-page-heading">CHATEASY</div> */}
             <div className="login-signup-container">
                 <div className="login-signup-headings">
                     <div

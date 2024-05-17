@@ -206,7 +206,7 @@ function Signup() {
                     </FormControl>
                     <Button
                         colorScheme="blue"
-                        width="100%"
+                        width="80%"
                         style={{ marginTop: 15 }}
                         onClick={handleSubmit}
                         isLoading={picLoading}
