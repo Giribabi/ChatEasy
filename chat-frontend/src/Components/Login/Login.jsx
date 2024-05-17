@@ -1,16 +1,20 @@
 import { useState } from "react";
-import show_password from "./../../assets/show-password.png";
-import hide_password from "./../../assets/hide-password.png";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { useToast } from "@chakra-ui/react";
+import { Button, useToast } from "@chakra-ui/react";
+import Loader from "../Loader/Loader";
+import { FormControl, FormLabel } from "@chakra-ui/form-control";
+import { Input, InputGroup, InputRightElement } from "@chakra-ui/input";
+import { VStack } from "@chakra-ui/layout";
 
 function Login() {
+    const [loading, setLoading] = useState(false);
     const [email, setEmail] = useState();
     const [password, setPassword] = useState();
-    const [show, setShow] = useState(false);
     const navigate = useNavigate();
     const toast = useToast();
+    const [showPassword, setShowPassword] = useState(false);
+    const handleClick = () => setShowPassword(!showPassword);
     const handleSubmit = async () => {
         if (!email || !password) {
             toast({
@@ -23,6 +27,7 @@ function Login() {
             return;
         }
         try {
+            setLoading(true);
             const config = {
                 header: {
                     "Content-type": "application/json",
@@ -53,58 +58,56 @@ function Login() {
                 isClosable: true,
                 position: "top-left",
             });
+        } finally {
+            setLoading(false);
         }
     };
-
     return (
         <div className="login-box">
-            <div className="input-container">
-                <div className="input-heading">Email:</div>
-                <div className="input-box">
-                    <input
-                        type="email"
-                        className="input"
-                        placeholder="enter your email"
-                        onChange={(e) => setEmail(e.target.value)}
-                    />
-                </div>
-            </div>
-            <div className="input-container">
-                <div className="input-heading">Password:</div>
-                <div className="input-box">
-                    <input
-                        type={show ? "text" : "password"}
-                        className="password-input"
-                        placeholder="enter password"
-                        onChange={(e) => setPassword(e.target.value)}
-                    />
-                    <div
-                        className="show-password-button"
-                        onClick={() => setShow(!show)}
+            {loading ? (
+                <Loader />
+            ) : (
+                <VStack spacing="10px">
+                    <FormControl id="email" isRequired>
+                        <FormLabel>Email Address</FormLabel>
+                        <Input
+                            value={email}
+                            type="email"
+                            placeholder="Enter Your Email Address"
+                            onChange={(e) => setEmail(e.target.value)}
+                        />
+                    </FormControl>
+                    <FormControl id="password" isRequired>
+                        <FormLabel>Password</FormLabel>
+                        <InputGroup size="md">
+                            <Input
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                                type={showPassword ? "text" : "password"}
+                                placeholder="Enter password"
+                            />
+                            <InputRightElement width="4.5rem">
+                                <Button
+                                    h="1.75rem"
+                                    size="sm"
+                                    onClick={handleClick}
+                                >
+                                    {showPassword ? "Hide" : "Show"}
+                                </Button>
+                            </InputRightElement>
+                        </InputGroup>
+                    </FormControl>
+                    <Button
+                        colorScheme="blue"
+                        width="100%"
+                        style={{ marginTop: 15 }}
+                        onClick={handleSubmit}
+                        isLoading={loading}
                     >
-                        {!show ? (
-                            <img
-                                src={show_password}
-                                height="25px"
-                                width="30px"
-                                alt="show_password"
-                            />
-                        ) : (
-                            <img
-                                src={hide_password}
-                                height="25px"
-                                width="30px"
-                                alt="hide_password"
-                            />
-                        )}
-                    </div>
-                </div>
-            </div>
-            <div className="login-button-container">
-                <div className="login-button" onClick={handleSubmit}>
-                    Login
-                </div>
-            </div>
+                        Login
+                    </Button>
+                </VStack>
+            )}
         </div>
     );
 }

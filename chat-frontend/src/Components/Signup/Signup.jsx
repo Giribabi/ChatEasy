@@ -1,24 +1,30 @@
 import { useState } from "react";
-import show_password from "./../../assets/show-password.png";
-import hide_password from "./../../assets/hide-password.png";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useToast } from "@chakra-ui/react";
+import { Button } from "@chakra-ui/button";
+import { FormControl, FormLabel } from "@chakra-ui/form-control";
+import { Input, InputGroup, InputRightElement } from "@chakra-ui/input";
+import { VStack } from "@chakra-ui/layout";
+import Loader from "../Loader/Loader";
 
 // add loader while image is uploading and while sending data to backend
 
 function Signup() {
+    const [loading, setLoading] = useState(false);
     const [name, setName] = useState();
     const [email, setEmail] = useState();
     const [password, setPassword] = useState();
     const [confirmPassword, setConfirmPassword] = useState();
     const [profilePicture, setProfilePicture] = useState();
-    const [show, setShow] = useState(false);
+    const [picLoading, setPicLoading] = useState(false);
     const navigate = useNavigate();
-
+    const [showPassword, setShowPassword] = useState(false);
     const toast = useToast();
+    const handleClick = () => setShowPassword(!showPassword);
 
     const postPic = (pic) => {
+        setPicLoading(true);
         if (pic === undefined) {
             toast({
                 title: "Select an image",
@@ -27,6 +33,7 @@ function Signup() {
                 isClosable: true,
                 position: "top-left",
             });
+            setPicLoading(false);
             return;
         }
         if (pic.type === "image/jpeg" || pic.type === "image/png") {
@@ -43,6 +50,7 @@ function Signup() {
                     setProfilePicture(data.url.toString());
                     //console.log(data.url.toString());
                     console.log("image upload completed");
+                    setPicLoading(false);
                 })
                 .catch((err) => {
                     console.log(err);
@@ -53,6 +61,7 @@ function Signup() {
                         isClosable: true,
                         position: "top-left",
                     });
+                    setPicLoading(false);
                 });
         } else {
             toast({
@@ -62,6 +71,7 @@ function Signup() {
                 isClosable: true,
                 position: "top-left",
             });
+            setPicLoading(false);
         }
     };
 
@@ -85,6 +95,7 @@ function Signup() {
             });
         }
         try {
+            setLoading(true);
             const config = {
                 header: {
                     "Content-type": "application/json",
@@ -118,114 +129,92 @@ function Signup() {
                 isClosable: true,
                 position: "top-left",
             });
+        } finally {
+            setLoading(false);
         }
     };
 
     return (
         <div className="login-box">
-            <div className="input-sets-container">
-                <div className="input-set1">
-                    <div className="input-container">
-                        <div className="input-heading">Name:</div>
-                        <div className="input-box">
-                            <input
-                                type="text"
-                                className="input"
-                                placeholder="enter your name"
-                                onChange={(e) => setName(e.target.value)}
-                            />
-                        </div>
-                    </div>
-                    <div className="input-container">
-                        <div className="input-heading">Email:</div>
-                        <div className="input-box">
-                            <input
-                                type="email"
-                                className="input"
-                                placeholder="enter your email"
-                                onChange={(e) => setEmail(e.target.value)}
-                            />
-                        </div>
-                    </div>
-                </div>
-                <div className="input-set2">
-                    <div className="input-container">
-                        <div className="input-heading">Password:</div>
-                        <div className="input-box">
-                            <input
-                                type={show ? "text" : "password"}
-                                className="password-input"
-                                placeholder="password"
+            {loading ? (
+                <Loader />
+            ) : (
+                <VStack spacing="5px">
+                    <FormControl id="first-name" isRequired>
+                        <FormLabel>Name</FormLabel>
+                        <Input
+                            placeholder="Enter Your Name"
+                            onChange={(e) => setName(e.target.value)}
+                        />
+                    </FormControl>
+                    <FormControl id="email" isRequired>
+                        <FormLabel>Email Address</FormLabel>
+                        <Input
+                            type="email"
+                            placeholder="Enter Your Email Address"
+                            onChange={(e) => setEmail(e.target.value)}
+                        />
+                    </FormControl>
+                    <FormControl id="password" isRequired>
+                        <FormLabel>Password</FormLabel>
+                        <InputGroup size="md">
+                            <Input
+                                type={showPassword ? "text" : "password"}
+                                placeholder="Enter Password"
                                 onChange={(e) => setPassword(e.target.value)}
                             />
-                            <div
-                                className="show-password-button"
-                                onClick={() => setShow(!show)}
-                            >
-                                {!show ? (
-                                    <img
-                                        src={show_password}
-                                        height="25px"
-                                        alt="show_password"
-                                    />
-                                ) : (
-                                    <img
-                                        src={hide_password}
-                                        height="25px"
-                                        alt="hide_password"
-                                    />
-                                )}
-                            </div>
-                        </div>
-                    </div>
-                    <div className="input-container">
-                        <div className="input-heading">Confirm Password:</div>
-                        <div className="input-box">
-                            <input
-                                type={show ? "text" : "password"}
-                                className="password-input"
-                                placeholder="password"
+                            <InputRightElement width="4.5rem">
+                                <Button
+                                    h="1.75rem"
+                                    size="sm"
+                                    onClick={handleClick}
+                                >
+                                    {showPassword ? "Hide" : "Show"}
+                                </Button>
+                            </InputRightElement>
+                        </InputGroup>
+                    </FormControl>
+                    <FormControl id="password" isRequired>
+                        <FormLabel>Confirm Password</FormLabel>
+                        <InputGroup size="md">
+                            <Input
+                                type={showPassword ? "text" : "password"}
+                                placeholder="Confirm password"
                                 onChange={(e) =>
                                     setConfirmPassword(e.target.value)
                                 }
                             />
-                            <div
-                                className="show-password-button"
-                                onClick={() => setShow(!show)}
-                            >
-                                {!show ? (
-                                    <img
-                                        src={show_password}
-                                        height="25px"
-                                        alt="show_password"
-                                    />
-                                ) : (
-                                    <img
-                                        src={hide_password}
-                                        height="25px"
-                                        alt="hide_password"
-                                    />
-                                )}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div className="input-container">
-                <div className="input-heading">Upload picture:</div>
-                <div className="input-box">
-                    <input
-                        type="file"
-                        accept="file"
-                        onChange={(e) => postPic(e.target.files[0])}
-                    />
-                </div>
-            </div>
-            <div className="login-button-container">
-                <div className="signup-button" onClick={handleSubmit}>
-                    Signup{" "}
-                </div>
-            </div>
+                            <InputRightElement width="4.5rem">
+                                <Button
+                                    h="1.75rem"
+                                    size="sm"
+                                    onClick={handleClick}
+                                >
+                                    {showPassword ? "Hide" : "Show"}
+                                </Button>
+                            </InputRightElement>
+                        </InputGroup>
+                    </FormControl>
+                    <FormControl id="pic">
+                        <FormLabel>Upload your Picture</FormLabel>
+                        <Input
+                            type="file"
+                            p={1.5}
+                            accept="image/*"
+                            onChange={(e) => postPic(e.target.files[0])}
+                        />
+                    </FormControl>
+                    <Button
+                        colorScheme="blue"
+                        width="100%"
+                        style={{ marginTop: 15 }}
+                        onClick={handleSubmit}
+                        isLoading={picLoading}
+                    >
+                        Sign Up
+                    </Button>
+                </VStack>
+            )}
         </div>
     );
 }
