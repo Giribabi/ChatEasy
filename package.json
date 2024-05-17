@@ -4,7 +4,7 @@
     "description": "chat app",
     "main": "server.js",
     "scripts": {
-        "start": "node backend/server.js",
+        "start": "concurrently \"node backend/server.js\" \"npm start --prefix chat-frontend\"",
         "server": "nodemon backend/server.js",
         "build": "npm install --legacy-peer-deps && npm install --legacy-peer-deps --prefix chat-frontend && npm run build --prefix chat-frontend"
     },
@@ -17,6 +17,7 @@
         "axios": "^1.6.7",
         "bcryptjs": "^2.4.3",
         "colors": "^1.4.0",
+        "concurrently": "^8.2.2",
         "cors": "^2.8.5",
         "dotenv": "^16.4.5",
         "express": "^4.18.2",
