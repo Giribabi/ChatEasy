@@ -64,6 +64,7 @@
     font-family: cursive;
     padding: 2% 8%;
     width: 100%;
+    min-width: 280px;
     margin: 3%;
     background-color: rgb(163, 163, 233);
     border-radius: 2em;

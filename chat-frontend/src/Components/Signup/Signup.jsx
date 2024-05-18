@@ -16,7 +16,7 @@ function Signup() {
     const [email, setEmail] = useState();
     const [password, setPassword] = useState();
     const [confirmPassword, setConfirmPassword] = useState();
-    const [profilePicture, setProfilePicture] = useState();
+    const [pic, setPic] = useState();
     const [picLoading, setPicLoading] = useState(false);
     const navigate = useNavigate();
     const [showPassword, setShowPassword] = useState(false);
@@ -47,7 +47,7 @@ function Signup() {
             })
                 .then((res) => res.json())
                 .then((data) => {
-                    setProfilePicture(data.url.toString());
+                    setPic(data.url.toString());
                     //console.log(data.url.toString());
                     console.log("image upload completed");
                     setPicLoading(false);
@@ -76,6 +76,7 @@ function Signup() {
     };
 
     const handleSubmit = async () => {
+        //console.log("pic:", pic);
         if (!name || !email || !password || !confirmPassword) {
             toast({
                 title: "Enter all the fields",
@@ -101,19 +102,20 @@ function Signup() {
                     "Content-type": "application/json",
                 },
             };
+
             const { data } = await axios.post(
                 " https://chateasy-1.onrender.com/api/user",
                 {
                     name,
                     email,
                     password,
-                    profilePicture,
+                    pic,
                 },
                 config
             );
             toast({
                 title: "Successfully registered",
-                status: "warning",
+                status: "success",
                 duration: "5000",
                 isClosable: true,
                 position: "top-left",

@@ -43,6 +43,7 @@ function Sidebar() {
         setNotifications,
     } = useContext(ChatContext);
     const navigate = useNavigate();
+    console.log(user);
 
     const handleLogOut = () => {
         localStorage.removeItem("userInfo");

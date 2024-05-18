@@ -3,6 +3,7 @@ import Modal from "react-bootstrap/Modal";
 import Image from "react-bootstrap/Image";
 
 function ProfileModal({ show, setShow, info, children }) {
+    // console.log(info.pic);
     return (
         <div className="profile-modal">
             {show ? (
