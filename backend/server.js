@@ -4,7 +4,7 @@ const app = express();
 const path = require("path");
 app.use(
     cors({
-        origin: "https://chateasy-1.onrender.com",
+        origin: "https://giribabi1-chateasy.vercel.app",
         allowedHeaders: ["Content-Type", "Authorization"], // Specify the allowed headers
     })
 );
@@ -92,7 +92,7 @@ const io = require("socket.io")(server, {
     // ping time out is to close the connection if there is no activity between user for more than a specific period, here: 60sec
     pingTimeout: 60000,
     cors: {
-        origin: "https://chateasy-1.onrender.com",
+        origin: "https://giribabi1-chateasy.vercel.app",
     },
 });
 
