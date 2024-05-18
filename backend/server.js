@@ -32,20 +32,20 @@ async function connectDB() {
 }
 connectDB();
 
-app.use((req, res, next) => {
-    res.setHeader("Access-Control-Allow-Origin", "*");
-    res.setHeader(
-        "Access-Control-Allow-Headers",
-        "Origin, X-Requested-With, Content, Accept, Content-Type, Authorization"
-    );
-    res.setHeader(
-        "Access-Control-Allow-Methods",
-        "GET, POST, PUT, DELETE, PATCH, OPTIONS"
-    );
-    next();
-});
+// app.use((req, res, next) => {
+//     res.setHeader("Access-Control-Allow-Origin", "*");
+//     res.setHeader(
+//         "Access-Control-Allow-Headers",
+//         "Origin, X-Requested-With, Content, Accept, Content-Type, Authorization"
+//     );
+//     res.setHeader(
+//         "Access-Control-Allow-Methods",
+//         "GET, POST, PUT, DELETE, PATCH, OPTIONS"
+//     );
+//     next();
+// });
 
-// this is to intercept every request of json type: (body parser)
+// // this is to intercept every request of json type: (body parser)
 app.use(express.json());
 
 app.get("/api/chat/:id", (req, res) => {
@@ -93,6 +93,7 @@ const io = require("socket.io")(server, {
     pingTimeout: 60000,
     cors: {
         origin: "https://giribabi-chateasy.vercel.app",
+        methods: ["GET", "POST"],
     },
 });
 
