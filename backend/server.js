@@ -86,7 +86,7 @@ app.use((err, req, res, next) => {
     });
 });
 
-const server = app.listen("3030", console.log(`this is my server `));
+const server = app.listen("3000", console.log(`this is my server `));
 
 const io = require("socket.io")(server, {
     // ping time out is to close the connection if there is no activity between user for more than a specific period, here: 60sec
