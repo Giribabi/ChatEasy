@@ -34,7 +34,7 @@ function Login() {
                 },
             };
             const { data } = await axios.post(
-                " https://chateasy-1.onrender.com/api/user/login",
+                " https://giribabi-chateasy-api.onrender.com/api/user/login",
                 {
                     email,
                     password,

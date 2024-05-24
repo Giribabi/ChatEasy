@@ -45,7 +45,7 @@ function GroupChatCRUDModal({ children }) {
                 },
             };
             const { data } = await axios.get(
-                `https://chateasy-1.onrender.com/api/user?search=${query}`,
+                `https://giribabi-chateasy-api.onrender.com/api/user?search=${query}`,
                 config
             );
             //console.log(data);
@@ -81,7 +81,7 @@ function GroupChatCRUDModal({ children }) {
                 },
             };
             const { data } = await axios.post(
-                "https://chateasy-1.onrender.com/api/chat/creategroup",
+                "https://giribabi-chateasy-api.onrender.com/api/chat/creategroup",
                 {
                     name: groupChatName,
                     users: JSON.stringify(selectedUsers.map((u) => u._id)),
