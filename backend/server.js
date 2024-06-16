@@ -22,7 +22,7 @@ const mongoose = require("mongoose");
 async function connectDB() {
     try {
         const connection = await mongoose.connect(
-            "mongodb+srv://sammidigiridhar:1$=SeventyRupees@cluster0.ktb6zi2.mongodb.net/?retryWrites=true&w=majority"
+            `mongodb+srv://${process.env.DATABASE_USERNAME}:${process.env.DATABASE_PASSWORD}@cluster0.ktb6zi2.mongodb.net/?retryWrites=true&w=majority`
         );
     } catch (err) {
         console.log(`Error: ${err.message}`.red.bold);
