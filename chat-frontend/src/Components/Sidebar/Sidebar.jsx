@@ -89,6 +89,7 @@ function Sidebar() {
     };
 
     const handleSearch = async () => {
+        console.log(user);
         if (!search) {
             toast({
                 title: "Enter a valid username or mail",
