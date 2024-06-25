@@ -106,7 +106,7 @@ function Signup() {
             };
 
             const { data } = await axios.post(
-                " https://giribabi-chateasy-api.onrender.com/api/user",
+                " https://giribabi-chateasy2024-api.onrender.com/api/user",
                 {
                     name,
                     email,

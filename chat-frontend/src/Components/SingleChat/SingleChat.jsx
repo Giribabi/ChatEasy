@@ -13,7 +13,7 @@ import Lottie from "react-lottie";
 import io from "socket.io-client";
 import animationData from "../animations/typing.json";
 
-const ENDPOINT = "https://giribabi-chateasy-api.onrender.com/";
+const ENDPOINT = "https://giribabi-chateasy2024-api.onrender.com/";
 
 var socket, selectedChatCompare;
 
@@ -90,7 +90,7 @@ function SingleChat({ fetchChatsAgain, setFetchChatsAgain }) {
                 },
             };
             const { data } = await axios.get(
-                `https://giribabi-chateasy-api.onrender.com/api/message/${selectedChat._id}`,
+                `https://giribabi-chateasy2024-api.onrender.com/api/message/${selectedChat._id}`,
                 config
             );
             //console.log(data);
@@ -151,7 +151,7 @@ function SingleChat({ fetchChatsAgain, setFetchChatsAgain }) {
                     },
                 };
                 const { data } = await axios.post(
-                    "https://giribabi-chateasy-api.onrender.com/api/message",
+                    "https://giribabi-chateasy2024-api.onrender.com/api/message",
                     {
                         content: newMessage,
                         chatId: selectedChat._id,
