@@ -161,7 +161,7 @@ function UpdateGroupChatModal({
     };
 
     const handleExitGroup = async (userToBeRemoved) => {
-        console.log("entered");
+        // console.log("entered");
         if (selectedChat.groupAdmin._id !== user._id) {
             toast({
                 title: "Only admins can remove users",

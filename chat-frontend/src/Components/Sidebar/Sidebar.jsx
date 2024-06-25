@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Tooltip from "react-bootstrap/Tooltip";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Button from "react-bootstrap/Button";
@@ -43,8 +43,7 @@ function Sidebar() {
         setNotifications,
     } = useContext(ChatContext);
     const navigate = useNavigate();
-    console.log(user);
-
+    // console.log(user);
     const handleLogOut = () => {
         localStorage.removeItem("userInfo");
         navigate("/");
