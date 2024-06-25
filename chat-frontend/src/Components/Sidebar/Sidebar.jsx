@@ -42,6 +42,7 @@ function Sidebar() {
         notifications,
         setNotifications,
     } = useContext(ChatContext);
+
     const navigate = useNavigate();
     // console.log(user);
     const handleLogOut = () => {
@@ -89,7 +90,7 @@ function Sidebar() {
     };
 
     const handleSearch = async () => {
-        console.log(user);
+        console.log("user:", user);
         if (!search) {
             toast({
                 title: "Enter a valid username or mail",
