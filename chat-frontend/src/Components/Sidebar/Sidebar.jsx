@@ -90,7 +90,6 @@ function Sidebar() {
     };
 
     const handleSearch = async () => {
-        console.log("user:", user);
         if (!search) {
             toast({
                 title: "Enter a valid username or mail",
@@ -113,7 +112,9 @@ function Sidebar() {
                 config
             );
             //console.log("fetched data:");
-            setSearchResult(data);
+            if (data.length === 0)
+                setSearchResult({ message: "No such users" });
+            else setSearchResult(data);
             //console.log(data);
         } catch (error) {
             console.log(error);
@@ -276,6 +277,8 @@ function Sidebar() {
                         {loading ? (
                             <ChatLoading />
                         ) : (
+                            searchResult &&
+                            !searchResult.message &&
                             searchResult?.map((user, index) => (
                                 <div
                                     onClick={() => accessChat(user._id)}
@@ -285,6 +288,7 @@ function Sidebar() {
                                 </div>
                             ))
                         )}
+                        {!loading && searchResult.message && "No such users"}
                         {loadingChat && <Loader />}
                     </DrawerBody>
                 </DrawerContent>

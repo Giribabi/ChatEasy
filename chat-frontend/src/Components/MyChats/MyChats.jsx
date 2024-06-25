@@ -36,7 +36,7 @@ function MyChats({ fetchChatsAgain }) {
                 config
             );
             //console.log("chats:");
-            //console.log(data);
+            // console.log(data);
             setChats(data);
             //console.log(data);
         } catch (error) {
@@ -110,37 +110,39 @@ function MyChats({ fetchChatsAgain }) {
                 >
                     {!loading && chats ? (
                         <Stack overflowY="scroll">
-                            {chats.map((chat, index) => (
-                                <Box
-                                    onClick={() => setSelectedChat(chat)}
-                                    cursor="pointer"
-                                    bg={
-                                        selectedChat === chat
-                                            ? "cyan"
-                                            : "lightgray"
-                                    }
-                                    color={
-                                        selectedChat === chat
-                                            ? "white"
-                                            : "black"
-                                    }
-                                    px={3}
-                                    py={2}
-                                    mx={2}
-                                    borderRadius="lg"
-                                    key={`${index}` + chat._id}
-                                >
-                                    {chat.users && (
-                                        <Text>
-                                            {chat.isGroupChat
-                                                ? chat.chatName
-                                                : chat.users[0]._id === user._id
-                                                ? chat.users[1].name
-                                                : chat.users[0].name}
-                                        </Text>
-                                    )}
-                                </Box>
-                            ))}
+                            {chats &&
+                                chats.map((chat, index) => (
+                                    <Box
+                                        onClick={() => setSelectedChat(chat)}
+                                        cursor="pointer"
+                                        bg={
+                                            selectedChat === chat
+                                                ? "cyan"
+                                                : "lightgray"
+                                        }
+                                        color={
+                                            selectedChat === chat
+                                                ? "white"
+                                                : "black"
+                                        }
+                                        px={3}
+                                        py={2}
+                                        mx={2}
+                                        borderRadius="lg"
+                                        key={`${index}` + chat._id}
+                                    >
+                                        {chat.users && (
+                                            <Text>
+                                                {chat.isGroupChat
+                                                    ? chat.chatName
+                                                    : chat.users[0]._id ===
+                                                      user._id
+                                                    ? chat.users[1].name
+                                                    : chat.users[0].name}
+                                            </Text>
+                                        )}
+                                    </Box>
+                                ))}
                         </Stack>
                     ) : (
                         <Loader />

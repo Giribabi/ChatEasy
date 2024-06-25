@@ -2,12 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const app = express();
 const path = require("path");
-app.use(
-    cors({
-        origin: "https://giribabi-chateasy.vercel.app",
-        allowedHeaders: ["Content-Type", "Authorization"], // Specify the allowed headers
-    })
-);
+app.use(cors());
 const dotenv = require("dotenv");
 const { chats } = require("./data/data");
 const colors = require("colors");
@@ -86,7 +81,7 @@ app.use((err, req, res, next) => {
     });
 });
 
-const server = app.listen("3000", console.log(`this is my server `));
+const server = app.listen("3030", console.log(`this is my server `));
 
 const io = require("socket.io")(server, {
     // ping time out is to close the connection if there is no activity between user for more than a specific period, here: 60sec

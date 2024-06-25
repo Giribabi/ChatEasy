@@ -17,13 +17,13 @@ import UserListItem from "../UserListItem/UserListItem";
 function GroupChatCRUDModal({ children }) {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [groupChatName, setGroupChatName] = useState("");
-    const [selectedUsers, setSelectedUsers] = useState([]);
     const [searchedResult, setSearchedResult] = useState([]);
     const [loading, setLoading] = useState(false);
 
     const toast = useToast();
 
     const { user, chats, setChats } = useContext(ChatContext);
+    const [selectedUsers, setSelectedUsers] = useState([user]);
     const [userToken, setUserToken] = useState(user ? user.token : null);
 
     //console.log(selectedUsers);

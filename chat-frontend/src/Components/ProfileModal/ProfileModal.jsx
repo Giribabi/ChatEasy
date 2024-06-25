@@ -11,7 +11,9 @@ function ProfileModal({ show, setShow, info, children }) {
                     <Modal show={show} size="lg" centered>
                         <Modal.Dialog>
                             <Modal.Header>
-                                <Modal.Title>{info.name}</Modal.Title>
+                                <Modal.Title>
+                                    {info.name || "Guest User"}
+                                </Modal.Title>
                             </Modal.Header>
                             <Modal.Body>
                                 <Image
@@ -20,7 +22,7 @@ function ProfileModal({ show, setShow, info, children }) {
                                     roundedCircle
                                 />
                                 <p style={{ textAlign: "center" }}>
-                                    {info.email}
+                                    {info.email || "@Guest"}
                                 </p>
                             </Modal.Body>
                             <Modal.Footer>

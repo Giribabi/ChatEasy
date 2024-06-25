@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { Button, useToast } from "@chakra-ui/react";
@@ -6,8 +6,10 @@ import Loader from "../Loader/Loader";
 import { FormControl, FormLabel } from "@chakra-ui/form-control";
 import { Input, InputGroup, InputRightElement } from "@chakra-ui/input";
 import { VStack } from "@chakra-ui/layout";
+import { ChatContext } from "../../Context/ChatProvider";
 
 function Login() {
+    const { setUser } = useContext(ChatContext);
     const [loading, setLoading] = useState(false);
     const [email, setEmail] = useState();
     const [password, setPassword] = useState();
@@ -48,6 +50,7 @@ function Login() {
                 isClosable: true,
                 position: "top-left",
             });
+            setUser(data);
             localStorage.setItem("userInfo", JSON.stringify(data));
             navigate("/chats");
         } catch (err) {

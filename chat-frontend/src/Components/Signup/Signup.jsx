@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useToast } from "@chakra-ui/react";
@@ -7,10 +7,12 @@ import { FormControl, FormLabel } from "@chakra-ui/form-control";
 import { Input, InputGroup, InputRightElement } from "@chakra-ui/input";
 import { VStack } from "@chakra-ui/layout";
 import Loader from "../Loader/Loader";
+import { ChatContext } from "../../Context/ChatProvider";
 
 // add loader while image is uploading and while sending data to backend
 
 function Signup() {
+    const { setUser } = useContext(ChatContext);
     const [loading, setLoading] = useState(false);
     const [name, setName] = useState();
     const [email, setEmail] = useState();
@@ -120,6 +122,7 @@ function Signup() {
                 isClosable: true,
                 position: "top-left",
             });
+            setUser(data);
             localStorage.setItem("userInfo", JSON.stringify(data));
             navigate("/chats");
         } catch (err) {

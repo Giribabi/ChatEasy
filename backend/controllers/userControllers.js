@@ -55,6 +55,7 @@ const authUser = asyncHandler(async (req, res) => {
 const allUsers = asyncHandler(async (req, res) => {
     //for /:id , we write req.params
     //for ?search=some_random_query , we write req.query
+    // res.send("response");
 
     //check if there is any query "req.query.search ?" (just like react.js {condition?true:false})
     const keyword = req.query.search
