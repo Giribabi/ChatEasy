@@ -142,12 +142,14 @@
 @media (max-width: 500px) {
     .login-signup-container {
         width: 80%;
-        /* background-color: transparent; */
         border: 1px solid rgb(169, 149, 169);
         box-shadow: 2px 2px 1px 1px rgb(150, 187, 211);
     }
     .login-heading,
     .signup-heading {
         font-size: 90%;
+    }
+    .login-signup-headings {
+        background-color: transparent;
     }
 }

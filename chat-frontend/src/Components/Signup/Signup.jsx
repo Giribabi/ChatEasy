@@ -179,7 +179,7 @@ function Signup() {
                             </InputRightElement>
                         </InputGroup>
                     </FormControl>
-                    <FormControl id="password" isRequired>
+                    <FormControl isRequired>
                         <FormLabel>Confirm Password</FormLabel>
                         <InputGroup size="md">
                             <Input

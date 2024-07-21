@@ -69,6 +69,7 @@ function MyChats({ fetchChatsAgain }) {
                 flexDir="column"
                 alignItems="center"
                 p={3}
+                ml={2}
                 bg="white"
                 w={windowWidth < 700 ? "95vw" : "35vw"}
                 h="89vh"
@@ -86,7 +87,7 @@ function MyChats({ fetchChatsAgain }) {
                     justifyContent="space-between"
                     alignItems="center"
                 >
-                    My Chats
+                    My Chats Set back button for drawer in mobile view
                     <GroupChatCRUDModal>
                         <Button
                             d="flex"
