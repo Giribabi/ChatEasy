@@ -11,6 +11,11 @@
     flex-direction: row;
     gap: 5px;
 }
+.drawer-header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
 .profile-menu {
     margin: 0vw 1vw;
 }

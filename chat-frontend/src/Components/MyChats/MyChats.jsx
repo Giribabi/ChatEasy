@@ -87,7 +87,7 @@ function MyChats({ fetchChatsAgain }) {
                     justifyContent="space-between"
                     alignItems="center"
                 >
-                    My Chats Set back button for drawer in mobile view
+                    My Chats
                     <GroupChatCRUDModal>
                         <Button
                             d="flex"

@@ -4,7 +4,7 @@ import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Button from "react-bootstrap/Button";
 import Dropdown from "react-bootstrap/Dropdown";
 import { Bell } from "react-bootstrap-icons";
-import { Avatar } from "@chakra-ui/react";
+import { Avatar, CloseButton } from "@chakra-ui/react";
 import { ChatContext } from "../../Context/ChatProvider";
 import "./Sidebar.css";
 import ProfileModal from "../ProfileModal/ProfileModal";
@@ -255,7 +255,12 @@ function Sidebar() {
             <Drawer isOpen={isOpen} placement="left" onClose={onClose}>
                 <DrawerOverlay />
                 <DrawerContent>
-                    <DrawerHeader>Search Users</DrawerHeader>
+                    <DrawerHeader>
+                        <div className="drawer-header">
+                            Search Users
+                            <CloseButton onClick={onClose} />
+                        </div>
+                    </DrawerHeader>
                     <DrawerBody>
                         <div
                             className="user-search-container"
