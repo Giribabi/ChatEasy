@@ -65,7 +65,7 @@ function MyChats({ fetchChatsAgain }) {
     return (
         <div>
             <Box
-                display={selectedChat ? "flex" : "flex"}
+                display={"flex"}
                 flexDir="column"
                 alignItems="center"
                 p={3}
@@ -110,7 +110,7 @@ function MyChats({ fetchChatsAgain }) {
                     overflowY="hidden"
                 >
                     {!loading && chats ? (
-                        <Stack overflowY="scroll">
+                        <Stack height="70vh" overflowY="scroll">
                             {chats &&
                                 chats.map((chat, index) => (
                                     <Box

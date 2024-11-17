@@ -1,9 +1,10 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useRef } from "react";
 import { ChatContext } from "../../Context/ChatProvider";
 import { Tooltip, Avatar } from "@chakra-ui/react";
 
 function ScrollableChat({ messages }) {
     const { user } = useContext(ChatContext);
+    const messagesEndRef = useRef();
 
     const isLastSenderMessage = (messages, ind, userId) => {
         return (
@@ -14,32 +15,42 @@ function ScrollableChat({ messages }) {
         );
     };
 
+    const scrollToLastMessage = () => {
+        if (messagesEndRef.current) {
+            messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
+        }
+    };
+
+    useEffect(() => {
+        scrollToLastMessage();
+    }, [messages]);
+
     // I have written 3 functions into one single simpler function which would be used to align positions and avatar display of sender messages.
 
     return (
         <div style={{ height: "68vh", overflowY: "auto" }}>
             {messages &&
-                messages.map((m, index) => (
+                messages.map((messageText, index) => (
                     <div
                         className="message"
                         style={{
                             width: "96%",
                             display: "flex",
                             justifyContent:
-                                m.sender._id === user._id
+                                messageText.sender._id === user._id
                                     ? "flex-end"
                                     : "flex-start",
                             margin: "0.5em",
                         }}
-                        key={`${index}` + m.sender._id}
+                        key={`${index}` + messageText.sender._id}
                     >
                         <div
                             className=""
                             style={{ display: "flex" }}
-                            key={m._id}
+                            key={messageText._id}
                         >
                             <Tooltip
-                                label={m.sender.name}
+                                label={messageText.sender.name}
                                 placement="bottom-start"
                                 hasArrow
                             >
@@ -56,25 +67,26 @@ function ScrollableChat({ messages }) {
                                     m={2}
                                     size="sm"
                                     cursor="pointer"
-                                    name={m.sender.name}
-                                    src={m.sender.pic}
+                                    name={messageText.sender.name}
+                                    src={messageText.sender.pic}
                                 />
                             </Tooltip>
                             <span
                                 style={{
                                     backgroundColor:
-                                        m.sender._id === user._id
+                                        messageText.sender._id === user._id
                                             ? "lightgreen"
                                             : "lightblue",
                                     borderRadius: "18px",
                                     padding: "10px",
                                 }}
                             >
-                                {m.content}
+                                {messageText.content}
                             </span>
                         </div>
                     </div>
                 ))}
+            <div className="message-end" ref={messagesEndRef}></div>
         </div>
     );
 }
